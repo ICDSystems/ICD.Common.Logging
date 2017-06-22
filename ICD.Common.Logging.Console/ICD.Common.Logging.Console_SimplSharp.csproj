@@ -82,9 +82,9 @@
     <None Include="Properties\ControlSystem.cfg" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\lib\Utils\src\ICD.Common\ICD.Common_SimplSharp.csproj">
+    <ProjectReference Include="..\..\lib\ICD.Common.Utils\src\ICD.Common\ICD.Common_SimplSharp.csproj">
       <Project>{CB4055C6-D59E-479E-9C56-2C92335A7D9A}</Project>
-      <Name>ICD.SimplSharp.Common</Name>
+      <Name>ICD.Common_SimplSharp</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
