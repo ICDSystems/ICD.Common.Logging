@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RSD.SimplSharp.Common.Interfaces\ICD.SimplSharp.Common\ICD.NetStandard.Common.csproj" />
+    <ProjectReference Include="..\..\lib\Utils\src\ICD.Common\ICD.Common_NetStandard.csproj" />
   </ItemGroup>
 
 </Project>
