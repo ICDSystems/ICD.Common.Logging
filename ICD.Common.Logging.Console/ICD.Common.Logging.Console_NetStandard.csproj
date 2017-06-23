@@ -29,7 +29,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\lib\ICD.Common.Utils\src\ICD.Common\ICD.Common_NetStandard.csproj" />
-    <ProjectReference Include="..\..\lib\Utils\src\ICD.Common\ICD.Common_NetStandard.csproj" />
   </ItemGroup>
 
 </Project>
