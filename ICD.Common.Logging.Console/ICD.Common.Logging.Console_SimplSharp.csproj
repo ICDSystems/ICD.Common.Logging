@@ -8,7 +8,7 @@
     <ProjectGuid>{8093AE94-7250-411E-9C55-68AB2B5D705A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ICD.Common.Logging.Console_SimplSharp</RootNamespace>
+    <RootNamespace>ICD.Common.Logging.Console</RootNamespace>
     <AssemblyName>ICD.Common.Logging.Console_SimplSharp</AssemblyName>
     <ProjectTypeGuids>{0B4745B0-194B-4BB6-8E21-E9057CA92500};{4D628B5B-2FBC-4AA6-8C16-197242AEB884};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PlatformFamilyName>WindowsCE</PlatformFamilyName>
