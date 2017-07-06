@@ -23,6 +23,7 @@
   <ItemGroup>
     <None Remove=".git" />
     <None Remove=".gitignore" />
+    <None Remove="ICD.Common.Logging.projectinfo" />
     <None Remove="ICD.Krang.projectinfo" />
     <None Remove="ICD.SimplSharp.projectinfo" />
   </ItemGroup>
