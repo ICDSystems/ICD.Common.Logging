@@ -34,6 +34,7 @@
     <None Remove="ICD.Common.Logging.projectinfo" />
     <None Remove="ICD.Krang.projectinfo" />
     <None Remove="ICD.SimplSharp.projectinfo" />
+    <None Remove="Properties\ControlSystem.cfg" />
   </ItemGroup>
 
   <ItemGroup>
