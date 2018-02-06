@@ -115,7 +115,7 @@ namespace ICD.Common.Logging.Console
 			try
 			{
 				if (m_LoggingDestinations.Count == 0)
-					IcdErrorLog.Notice("ELogging - Entry received with no handlers subscribed - dropping");
+					IcdErrorLog.Notice("{0} - Attempted to add entry with no loggers registered", GetType().Name);
 
 				foreach (ISystemLogger logger in m_LoggingDestinations)
 				{
@@ -125,7 +125,7 @@ namespace ICD.Common.Logging.Console
 					}
 					catch (Exception e)
 					{
-						IcdErrorLog.Exception(e, "Exception adding log to {0}", logger.GetType().Name);
+						IcdErrorLog.Exception(e, "{0} - Exception adding log to {1}", GetType().Name, logger.GetType().Name);
 					}
 				}
 			}
