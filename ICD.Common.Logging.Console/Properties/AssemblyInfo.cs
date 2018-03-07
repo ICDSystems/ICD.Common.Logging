@@ -4,4 +4,4 @@
 [assembly: AssemblyCompany("ICD Systems")]
 [assembly: AssemblyProduct("ICD.Common.Logging.Console")]
 [assembly: AssemblyCopyright("Copyright © ICD Systems 2018")]
-[assembly: AssemblyVersion("3.0.0.*")]
+[assembly: AssemblyVersion("3.0.0.0")]
