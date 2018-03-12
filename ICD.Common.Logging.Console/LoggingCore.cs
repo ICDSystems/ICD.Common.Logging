@@ -128,13 +128,15 @@ namespace ICD.Common.Logging.Console
 						IcdErrorLog.Exception(e, "{0} - Exception adding log to {1}", GetType().Name, logger.GetType().Name);
 					}
 				}
+
+				AddHistory(item);
 			}
 			finally
 			{
 				m_LoggingSection.Leave();
 			}
 
-			AddHistory(item);
+			OnEntryAdded.Raise(null, new LogItemEventArgs(item));
 		}
 
 		/// <summary>
@@ -228,8 +230,6 @@ namespace ICD.Common.Logging.Console
 			{
 				m_HistorySection.Leave();
 			}
-
-			OnEntryAdded.Raise(null, new LogItemEventArgs(item));
 		}
 
 		#endregion
