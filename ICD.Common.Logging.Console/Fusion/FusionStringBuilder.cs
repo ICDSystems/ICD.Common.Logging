@@ -157,9 +157,7 @@ namespace ICD.Common.Logging.Console.Fusion
 					errorString += ERROR_DELIMITER;
 			}
 
-			errorString.TrimEnd();
-
-			return errorString;
+			return errorString.TrimEnd();
 		}
 
 		/// <summary>
