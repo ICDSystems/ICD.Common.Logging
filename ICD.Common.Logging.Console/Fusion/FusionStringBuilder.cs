@@ -101,7 +101,8 @@ namespace ICD.Common.Logging.Console.Fusion
 		[PublicAPI]
 		public eFusionSeverity GetErrorSeverity(string error)
 		{
-			return m_Errors.ContainsKey(error) ? m_Errors[error] : eFusionSeverity.Ok;
+			eFusionSeverity value;
+			return m_Errors.TryGetValue(error, out value) ? value : eFusionSeverity.Ok;
 		}
 
 		/// <summary>
