@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.0.1] - 2018-09-14
+### Changed
+ - Small optimizations
+
 ## [5.0.0] - 2018-04-27
 ### Changed
  - Removed suffix from assembly names
