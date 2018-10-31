@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using ICD.Common.Logging.Console.Loggers;
 using ICD.Common.Properties;
 using ICD.Common.Utils;
@@ -147,16 +146,7 @@ namespace ICD.Common.Logging.Console
 		[PublicAPI]
 		public bool AddLogger(ISystemLogger logger)
 		{
-			m_LoggingSection.Enter();
-
-			try
-			{
-				return m_LoggingDestinations.Add(logger);
-			}
-			finally
-			{
-				m_LoggingSection.Leave();
-			}
+			return m_LoggingSection.Execute(() => m_LoggingDestinations.Add(logger));
 		}
 
 		/// <summary>
@@ -171,37 +161,13 @@ namespace ICD.Common.Logging.Console
 		}
 
 		/// <summary>
-		/// Returns true if the core contains a logger of the given type.
-		/// </summary>
-		/// <typeparam name="TLogger"></typeparam>
-		/// <returns></returns>
-		[PublicAPI]
-		public bool ContainsLoggerOfType<TLogger>()
-			where TLogger : ISystemLogger
-		{
-			return m_LoggingSection.Execute(() => m_LoggingDestinations.Any(l => l.GetType() == typeof(TLogger)));
-		}
-
-		/// <summary>
-		/// Gets the logger of the given type.
-		/// </summary>
-		/// <typeparam name="TLogger"></typeparam>
-		/// <returns></returns>
-		[PublicAPI]
-		public TLogger GetLoggerByType<TLogger>()
-			where TLogger : ISystemLogger
-		{
-			return (TLogger)m_LoggingSection.Execute(() => m_LoggingDestinations.First(l => l.GetType() == typeof(TLogger)));
-		}
-
-		/// <summary>
 		/// Gets the log history.
 		/// </summary>
 		/// <returns></returns>
 		[PublicAPI]
 		public KeyValuePair<int, LogItem>[] GetHistory()
 		{
-			return m_HistorySection.Execute(() => m_History.ToArray());
+			return m_HistorySection.Execute(() => m_History.ToArray(m_History.Count));
 		}
 
 		#endregion
