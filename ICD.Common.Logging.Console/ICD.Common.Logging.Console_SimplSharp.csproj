@@ -75,6 +75,7 @@
     <Compile Include="Loggers\IcdErrorLogger.cs" />
     <Compile Include="Loggers\FeedbackLogger.cs" />
     <Compile Include="Fusion\FusionStringBuilder.cs" />
+    <Compile Include="Loggers\FileLogger.cs" />
     <Compile Include="Loggers\ISystemLogger.cs" />
     <Compile Include="LoggingCore.cs" />
     <None Include="ObfuscationSettings.cs" />
