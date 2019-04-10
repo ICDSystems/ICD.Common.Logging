@@ -7,8 +7,8 @@ namespace ICD.Common.Logging.Console.Loggers
 {
 	public sealed class FileLogger : ISystemLogger
 	{
-		private static readonly Dictionary<eSeverity, string> s_SeverityLabels
-			= new Dictionary<eSeverity, string>
+		private static readonly Dictionary<eSeverity, string> s_SeverityLabels =
+			new Dictionary<eSeverity, string>
 			{
 				{eSeverity.Emergency, "Emrgcy"},
 				{eSeverity.Alert, "Alert "},
@@ -17,7 +17,7 @@ namespace ICD.Common.Logging.Console.Loggers
 				{eSeverity.Warning, "Warn  "},
 				{eSeverity.Notice, "Notice"},
 				{eSeverity.Informational, "Info  "},
-				{eSeverity.Debug, "Debug "},
+				{eSeverity.Debug, "Debug "}
 			}; 
 
 		private readonly SafeCriticalSection m_LogSection;
@@ -27,11 +27,20 @@ namespace ICD.Common.Logging.Console.Loggers
 		/// Constructor.
 		/// </summary>
 		public FileLogger()
+			: this(PathUtils.ProgramLogsPath)
+		{
+		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="directoryPath"></param>
+		public FileLogger(string directoryPath)
 		{
 			m_LogSection = new SafeCriticalSection();
-			m_Path = PathUtils.Join(PathUtils.ProgramLogsPath, "ICD.log");
+			m_Path = BuildPathToLogFile(directoryPath);
 
-			IcdDirectory.CreateDirectory(PathUtils.ProgramLogsPath);
+			IcdDirectory.CreateDirectory(directoryPath);
 		}
 
 		/// <summary>
@@ -61,6 +70,16 @@ namespace ICD.Common.Logging.Console.Loggers
 			                     s_SeverityLabels[item.Severity],
 			                     item.Timestamp.ToLocalTime(),
 			                     item.Message);
+		}
+
+		private static string BuildPathToLogFile(string directoryPath)
+		{
+			string date = IcdEnvironment.GetLocalTime()
+			                            .ToUniversalTime()
+			                            .ToString("s")
+			                            .Replace(':', '-') + "Z.log";
+
+			return PathUtils.Join(directoryPath, date);
 		}
 	}
 }
