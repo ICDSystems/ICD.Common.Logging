@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.1.0] - 2019-04-16
+### Added
+ - Added FileLogger
+
 ## [5.0.1] - 2018-09-14
 ### Changed
  - Small optimizations
