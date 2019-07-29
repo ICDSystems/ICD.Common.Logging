@@ -111,8 +111,6 @@ namespace ICD.Common.Logging.Console
 
 			ISystemLogger[] loggers = m_LoggingSection.Execute(() => m_LoggingDestinations.ToArray(m_LoggingDestinations.Count));
 
-			m_LoggingSection.Enter();
-
 			if (loggers.Length == 0)
 				IcdErrorLog.Notice("{0} - Attempted to add entry with no loggers registered", GetType().Name);
 
