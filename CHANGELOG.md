@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
  - Added FileLogger
 
+## [5.0.2] - 2019-07-31
+### Changed
+ - Potential deadlock fix added to logging core
+
 ## [5.0.1] - 2018-09-14
 ### Changed
  - Small optimizations

@@ -109,31 +109,24 @@ namespace ICD.Common.Logging.Console
 			if (item.Severity > SeverityLevel)
 				return;
 
-			m_LoggingSection.Enter();
+			ISystemLogger[] loggers = m_LoggingSection.Execute(() => m_LoggingDestinations.ToArray(m_LoggingDestinations.Count));
 
-			try
+			if (loggers.Length == 0)
+				IcdErrorLog.Notice("{0} - Attempted to add entry with no loggers registered", GetType().Name);
+
+			foreach (ISystemLogger logger in loggers)
 			{
-				if (m_LoggingDestinations.Count == 0)
-					IcdErrorLog.Notice("{0} - Attempted to add entry with no loggers registered", GetType().Name);
-
-				foreach (ISystemLogger logger in m_LoggingDestinations)
+				try
 				{
-					try
-					{
-						logger.AddEntry(item);
-					}
-					catch (Exception e)
-					{
-						IcdErrorLog.Exception(e, "{0} - Exception adding log to {1}", GetType().Name, logger.GetType().Name);
-					}
+					logger.AddEntry(item);
 				}
+				catch (Exception e)
+				{
+					IcdErrorLog.Exception(e, "{0} - Exception adding log to {1}", GetType().Name, logger.GetType().Name);
+				}
+			}
 
-				AddHistory(item);
-			}
-			finally
-			{
-				m_LoggingSection.Leave();
-			}
+			AddHistory(item);
 
 			OnEntryAdded.Raise(null, new LogItemEventArgs(item));
 		}
