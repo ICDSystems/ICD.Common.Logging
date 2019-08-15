@@ -3,7 +3,7 @@ using ICD.Common.Utils;
 using ICD.Common.Utils.IO;
 using ICD.Common.Utils.Services.Logging;
 
-namespace ICD.Common.Logging.Console.Loggers
+namespace ICD.Common.Logging.Loggers
 {
 	public sealed class FileLogger : ISystemLogger
 	{

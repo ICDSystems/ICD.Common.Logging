@@ -4,8 +4,8 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>ICD.Common.Logging.Console</RootNamespace>
-    <AssemblyName>ICD.Common.Logging.Console</AssemblyName>
+    <RootNamespace>ICD.Common.Logging</RootNamespace>
+    <AssemblyName>ICD.Common.Logging</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Deterministic>true</Deterministic>
     <EazfuscatorIntegration>MSBuild</EazfuscatorIntegration>
@@ -31,6 +31,7 @@
     <None Remove=".git" />
     <None Remove=".gitignore" />
     <None Remove="ICD.Common.Logging.projectinfo" />
+    <None Remove="ICD.Common.projectinfo" />
     <None Remove="ICD.Krang.projectinfo" />
     <None Remove="ICD.SimplSharp.projectinfo" />
     <None Remove="Properties\ControlSystem.cfg" />

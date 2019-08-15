@@ -3,7 +3,7 @@ using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Services.Logging;
 
-namespace ICD.Common.Logging.Console.Loggers
+namespace ICD.Common.Logging.Loggers
 {
 	/// <summary>
 	/// Simple logger that raises logs via events.

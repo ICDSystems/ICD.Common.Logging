@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
 
-namespace ICD.Common.Logging.Console.Fusion
+namespace ICD.Common.Logging.Fusion
 {
 	public enum eFusionSeverity
 	{

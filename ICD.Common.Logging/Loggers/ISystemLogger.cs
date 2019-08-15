@@ -1,6 +1,6 @@
 ﻿using ICD.Common.Utils.Services.Logging;
 
-namespace ICD.Common.Logging.Console.Loggers
+namespace ICD.Common.Logging.Loggers
 {
 	public interface ISystemLogger
 	{
