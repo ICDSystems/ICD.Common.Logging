@@ -74,8 +74,7 @@ namespace ICD.Common.Logging.Loggers
 
 		private static string BuildPathToLogFile(string directoryPath)
 		{
-			string date = IcdEnvironment.GetLocalTime()
-			                            .ToUniversalTime()
+			string date = IcdEnvironment.GetUtcTime()
 			                            .ToString("s")
 			                            .Replace(':', '-') + "Z.log";
 
