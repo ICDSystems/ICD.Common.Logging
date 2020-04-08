@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [6.0.1] - 2020-04-08
+### Changed
+ - Using UTC time for logs instead of converting
+
 ## [6.0.0] - 2019-10-07
 ### Changed
  - Renamed ICD.Common.Logging.Console project to ICD.Common.Logging
