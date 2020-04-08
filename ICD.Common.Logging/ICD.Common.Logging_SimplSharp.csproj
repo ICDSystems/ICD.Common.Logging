@@ -77,6 +77,9 @@
     <Compile Include="Fusion\FusionStringBuilder.cs" />
     <Compile Include="Loggers\FileLogger.cs" />
     <Compile Include="Loggers\ISystemLogger.cs" />
+    <Compile Include="LoggingContexts\AbstractLoggingContext.cs" />
+    <Compile Include="LoggingContexts\ILoggingContext.cs" />
+    <Compile Include="LoggingContexts\ServiceLoggingContext.cs" />
     <Compile Include="LoggingCore.cs" />
     <None Include="ObfuscationSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
