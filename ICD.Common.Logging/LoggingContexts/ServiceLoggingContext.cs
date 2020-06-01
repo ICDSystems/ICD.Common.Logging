@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using ICD.Common.Utils;
 using ICD.Common.Utils.Services;
 using ICD.Common.Utils.Services.Logging;
 
@@ -9,8 +7,6 @@ namespace ICD.Common.Logging.LoggingContexts
 	public sealed class ServiceLoggingContext : AbstractLoggingContext
 	{
 		private readonly object m_Target;
-		private readonly Dictionary<string, object> m_ErrorStates;
-		private readonly SafeCriticalSection m_ErrorsStatesSection;
 
 		private WeakReference m_CachedLoggerService;
 
@@ -38,8 +34,6 @@ namespace ICD.Common.Logging.LoggingContexts
 		public ServiceLoggingContext(object target)
 		{
 			m_Target = target;
-			m_ErrorStates = new Dictionary<string, object>();
-			m_ErrorsStatesSection = new SafeCriticalSection();
 		}
 
 		#region Methods
@@ -70,35 +64,6 @@ namespace ICD.Common.Logging.LoggingContexts
 			Log(severity, string.Format(message, args));
 		}
 
-		/// <summary>
-		/// Sets the current error state for the given key.
-		/// </summary>
-		/// <param name="key"></param>
-		/// <param name="severity"></param>
-		/// <param name="value"></param>
-		public override void Set<T>(string key, eSeverity severity, T value)
-		{
-			m_ErrorsStatesSection.Enter();
-
-			try
-			{
-				object current;
-				if (m_ErrorStates.TryGetValue(key, out current) &&
-				    EqualityComparer<T>.Default.Equals((T)current, value))
-					return;
-
-				m_ErrorStates[key] = value;
-			}
-			finally
-			{
-				m_ErrorsStatesSection.Leave();
-			}
-
-			string message = string.Format("{0} set to: {1}", key, GetStringForLogValue(value));
-
-			Log(severity, message);
-		}
-
 		#endregion
 
 		#region Private Methods
@@ -112,20 +77,6 @@ namespace ICD.Common.Logging.LoggingContexts
 
 			// Otherwise get the string representation
 			return string.Format("{0}", target);
-		}
-
-		private static string GetStringForLogValue<T>(T value)
-		{
-// ReSharper disable CompareNonConstrainedGenericWithNull
-			if (value == null)
-// ReSharper restore CompareNonConstrainedGenericWithNull
-				return "NULL";
-
-			Type underlying = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
-			if (underlying.IsEnum)
-				return StringUtils.NiceName(value);
-
-			return value.ToString();
 		}
 
 		#endregion

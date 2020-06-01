@@ -71,6 +71,9 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activities\Activity.cs" />
+    <Compile Include="Activities\ActivityContext.cs" />
+    <Compile Include="Activities\IActivityContext.cs" />
     <Compile Include="Fusion\FusionErrorEventArgs.cs" />
     <Compile Include="Loggers\IcdErrorLogger.cs" />
     <Compile Include="Loggers\FeedbackLogger.cs" />
