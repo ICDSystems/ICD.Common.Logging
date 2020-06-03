@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using ICD.Common.Logging.LoggingContexts;
 using ICD.Common.Utils.EventArguments;
 
 namespace ICD.Common.Logging.Activities
 {
-	public interface IActivityContext
+	public interface IActivityContext : IEnumerable<Activity>
 	{
 		/// <summary>
 		/// Raised when the most pressing activity changes.

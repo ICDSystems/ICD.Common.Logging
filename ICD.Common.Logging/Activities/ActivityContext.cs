@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using ICD.Common.Logging.LoggingContexts;
 using ICD.Common.Utils;
 using ICD.Common.Utils.EventArguments;
@@ -48,6 +50,16 @@ namespace ICD.Common.Logging.Activities
 			}
 
 			OnActivityChanged.Raise(this, new GenericEventArgs<Activity>(activity));
+		}
+
+		public IEnumerator<Activity> GetEnumerator()
+		{
+			return m_ActivitiesSection.Execute(() => m_Activities.Values.ToList().GetEnumerator());
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
 		}
 	}
 }
