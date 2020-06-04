@@ -18,33 +18,42 @@ namespace ICD.Common.Logging
 	{
 		private const int HISTORY_SIZE = 100;
 
+		/// <summary>
+		/// Raised when an item is logged against the logger service.
+		/// </summary>
 		[PublicAPI]
 		public event EventHandler<LogItemEventArgs> OnEntryAdded;
 
+		/// <summary>
+		/// Raised when the severity level changes.
+		/// </summary>
 		[PublicAPI]
 		public event EventHandler<SeverityEventArgs> OnSeverityLevelChanged;
 
 		/// <summary>
 		/// HashSet of ISystemLoggers to allow for multiple logging destinations.
 		/// </summary>
-		private readonly IcdHashSet<ISystemLogger> m_LoggingDestinations;
-
-		private readonly SafeCriticalSection m_LoggingSection;
+		private readonly IcdHashSet<ISystemLogger> m_Loggers;
+		private readonly SafeCriticalSection m_LoggersSection;
 
 		/// <summary>
 		/// Keeps track of the most recent logs.
 		/// </summary>
 		private readonly ScrollQueue<KeyValuePair<int, LogItem>> m_History;
-
 		private readonly SafeCriticalSection m_HistorySection;
+
+		/// <summary>
+		/// Log items that need to be processed.
+		/// </summary>
+		private readonly Queue<LogItem> m_Queue;
+		private readonly SafeCriticalSection m_QueueSection;
+		private readonly SafeCriticalSection m_ProcessSection;
 
 		private int m_LogIndex;
 		private eSeverity m_SeverityLevel;
 
-		#region Properties
-
 		/// <summary>
-		/// Gets and sets the severity level.
+		/// Gets and sets the minimum severity threshold for log items to be logged.
 		/// </summary>
 		[PublicAPI]
 		public eSeverity SeverityLevel
@@ -61,43 +70,22 @@ namespace ICD.Common.Logging
 			}
 		}
 
-		#endregion
-
-		#region Constructors
-
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		public LoggingCore()
 		{
-			m_LoggingDestinations = new IcdHashSet<ISystemLogger>();
+			m_Loggers = new IcdHashSet<ISystemLogger>();
 			m_History = new ScrollQueue<KeyValuePair<int, LogItem>>(HISTORY_SIZE);
+			m_Queue = new Queue<LogItem>();
 
-			m_LoggingSection = new SafeCriticalSection();
+			m_LoggersSection = new SafeCriticalSection();
 			m_HistorySection = new SafeCriticalSection();
+			m_QueueSection = new SafeCriticalSection();
+			m_ProcessSection = new SafeCriticalSection();
 		}
-
-		#endregion
 
 		#region Methods
-
-		/// <summary>
-		/// Removes all loggers.
-		/// </summary>
-		[PublicAPI]
-		public void Clear()
-		{
-			m_LoggingSection.Execute(() => m_LoggingDestinations.Clear());
-		}
-
-		/// <summary>
-		/// Clears the log history.
-		/// </summary>
-		[PublicAPI]
-		public void ClearHistory()
-		{
-			m_HistorySection.Execute(() => m_History.Clear());
-		}
 
 		/// <summary>
 		/// Adds the log item to each logger.
@@ -109,10 +97,82 @@ namespace ICD.Common.Logging
 			if (item.Severity > SeverityLevel)
 				return;
 
-			ISystemLogger[] loggers = m_LoggingSection.Execute(() => m_LoggingDestinations.ToArray(m_LoggingDestinations.Count));
+			m_QueueSection.Execute(() => m_Queue.Enqueue(item));
+			ThreadingUtils.SafeInvoke(ProcessQueue);
+		}
 
+		/// <summary>
+		/// Adds the logger. Returns false if it's already in the core.
+		/// </summary>
+		/// <param name="logger"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public bool AddLogger([NotNull] ISystemLogger logger)
+		{
+			if (logger == null)
+				throw new ArgumentNullException("logger");
+
+			return m_LoggersSection.Execute(() => m_Loggers.Add(logger));
+		}
+
+		/// <summary>
+		/// Removes the logger. Returns false if the logger was not in the core.
+		/// </summary>
+		/// <param name="logger"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public bool RemoveLogger([NotNull] ISystemLogger logger)
+		{
+			if (logger == null)
+				throw new ArgumentNullException("logger");
+
+			return m_LoggersSection.Execute(() => m_Loggers.Remove(logger));
+		}
+
+		/// <summary>
+		/// Gets the log history.
+		/// </summary>
+		/// <returns></returns>
+		[PublicAPI]
+		[NotNull]
+		public IEnumerable<KeyValuePair<int, LogItem>> GetHistory()
+		{
+			return m_HistorySection.Execute(() => m_History.ToArray(m_History.Count));
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		/// <summary>
+		/// Works through the queue of log items and sends them to the registered loggers.
+		/// </summary>
+		private void ProcessQueue()
+		{
+			if (!m_ProcessSection.TryEnter())
+				return;
+
+			try
+			{
+				LogItem item = default(LogItem);
+				while (m_QueueSection.Execute(() => m_Queue.Dequeue(out item)))
+					ProcessItem(item);
+			}
+			finally
+			{
+				m_ProcessSection.Leave();
+			}
+		}
+
+		/// <summary>
+		/// Sends the log item to the registered loggers.
+		/// </summary>
+		/// <param name="item"></param>
+		private void ProcessItem(LogItem item)
+		{
+			ISystemLogger[] loggers = m_LoggersSection.Execute(() => m_Loggers.ToArray(m_Loggers.Count));
 			if (loggers.Length == 0)
-				IcdErrorLog.Notice("{0} - Attempted to add entry with no loggers registered", GetType().Name);
+				IcdErrorLog.Warn("{0} - Attempted to add entry with no loggers registered", GetType().Name);
 
 			foreach (ISystemLogger logger in loggers)
 			{
@@ -130,42 +190,6 @@ namespace ICD.Common.Logging
 
 			OnEntryAdded.Raise(null, new LogItemEventArgs(item));
 		}
-
-		/// <summary>
-		/// Adds the logger. Returns false if it's already in the core.
-		/// </summary>
-		/// <param name="logger"></param>
-		/// <returns></returns>
-		[PublicAPI]
-		public bool AddLogger(ISystemLogger logger)
-		{
-			return m_LoggingSection.Execute(() => m_LoggingDestinations.Add(logger));
-		}
-
-		/// <summary>
-		/// Removes the logger. Returns false if the logger was not in the core.
-		/// </summary>
-		/// <param name="logger"></param>
-		/// <returns></returns>
-		[PublicAPI]
-		public bool RemoveLogger(ISystemLogger logger)
-		{
-			return m_LoggingSection.Execute(() => m_LoggingDestinations.Remove(logger));
-		}
-
-		/// <summary>
-		/// Gets the log history.
-		/// </summary>
-		/// <returns></returns>
-		[PublicAPI]
-		public KeyValuePair<int, LogItem>[] GetHistory()
-		{
-			return m_HistorySection.Execute(() => m_History.ToArray(m_History.Count));
-		}
-
-		#endregion
-
-		#region Private Methods
 
 		/// <summary>
 		/// Adds the item to the recent history.
