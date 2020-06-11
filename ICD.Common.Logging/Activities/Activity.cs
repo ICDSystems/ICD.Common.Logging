@@ -4,7 +4,7 @@ using ICD.Common.Utils.Services.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace ICD.Common.Logging.LoggingContexts
+namespace ICD.Common.Logging.Activities
 {
 	public struct Activity : IComparable<Activity>, IEquatable<Activity>
 	{
