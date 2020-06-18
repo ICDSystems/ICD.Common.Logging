@@ -6,8 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [7.0.0] - 2020-06-18
 ### Added
  - Added ILoggingContext and service wrapper implementation
+ - Added IActivityContext for tracking activity changes
+
+### Changed
+ - Logs are processed asynchronously
 
 ## [6.0.1] - 2020-04-08
 ### Changed
