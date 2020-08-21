@@ -202,7 +202,9 @@ namespace ICD.Common.Logging
 			try
 			{
 				KeyValuePair<int, LogItem> entry = new KeyValuePair<int, LogItem>(m_LogIndex, item);
-				m_History.Enqueue(entry);
+
+				KeyValuePair<int, LogItem> removed;
+				m_History.Enqueue(entry, out removed);
 
 				unchecked
 				{
