@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ICD.Common.Logging.LoggingContexts;
 using ICD.Common.Utils.EventArguments;
 
 namespace ICD.Common.Logging.Activities
