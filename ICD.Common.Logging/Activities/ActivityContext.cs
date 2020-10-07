@@ -11,7 +11,7 @@ namespace ICD.Common.Logging.Activities
 	public sealed class ActivityContext : IActivityContext
 	{
 		/// <summary>
-		/// Raised when the most pressing activity changes.
+		/// Raised when an activity changes.
 		/// </summary>
 		public event EventHandler<GenericEventArgs<Activity>> OnActivityChanged;
 
@@ -38,7 +38,7 @@ namespace ICD.Common.Logging.Activities
 			try
 			{
 				Activity old;
-				if (m_Activities.TryGetValue(activity.Key, out old) && activity == old)
+				if (m_Activities.TryGetValue(activity.Key, out old) && EqualContent(activity, old))
 					return;
 
 				m_Activities[activity.Key] = activity;
@@ -51,9 +51,23 @@ namespace ICD.Common.Logging.Activities
 			OnActivityChanged.Raise(this, new GenericEventArgs<Activity>(activity));
 		}
 
+		/// <summary>
+		/// Returns true if the content of the given activities are equal.
+		/// </summary>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
+		private static bool EqualContent(Activity a, Activity b)
+		{
+			return a.Priority == b.Priority &&
+			       a.Key == b.Key &&
+			       a.Severity == b.Severity &&
+			       a.Message == b.Message;
+		}
+
 		public IEnumerator<Activity> GetEnumerator()
 		{
-			return m_ActivitiesSection.Execute(() => m_Activities.Values.ToList().GetEnumerator());
+			return m_ActivitiesSection.Execute(() => m_Activities.Values.Order().ToList().GetEnumerator());
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

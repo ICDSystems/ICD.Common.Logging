@@ -22,6 +22,7 @@ namespace ICD.Common.Logging.Activities
 		private readonly string m_Key;
 		private readonly string m_Message;
 		private readonly eSeverity m_Severity;
+		private readonly Guid m_Uuid;
 
 		#region Properties
 
@@ -46,6 +47,11 @@ namespace ICD.Common.Logging.Activities
 		[JsonConverter(typeof(StringEnumConverter))]
 		public eSeverity Severity { get { return m_Severity; } }
 
+		/// <summary>
+		/// Gets the unique ID for this activity.
+		/// </summary>
+		public Guid Uuid { get { return m_Uuid; } }
+
 		#endregion
 
 		/// <summary>
@@ -58,6 +64,7 @@ namespace ICD.Common.Logging.Activities
 			m_Key = key;
 			m_Message = message;
 			m_Severity = severity;
+			m_Uuid = Guid.NewGuid();
 		}
 
 		#region Equality
@@ -105,7 +112,8 @@ namespace ICD.Common.Logging.Activities
 			return m_Priority == other.m_Priority &&
 			       m_Key == other.m_Key &&
 			       m_Severity == other.m_Severity &&
-			       m_Message == other.m_Message;
+			       m_Message == other.m_Message &&
+				   m_Uuid == other.m_Uuid;
 		}
 
 		/// <summary>
@@ -122,6 +130,7 @@ namespace ICD.Common.Logging.Activities
 				hash = hash * 23 + (m_Key == null ? 0 : m_Key.GetHashCode());
 				hash = hash * 23 + (m_Message == null ? 0 : m_Message.GetHashCode());
 				hash = hash * 23 + (int)m_Severity;
+				hash = hash * 23 + m_Uuid.GetHashCode();
 				return hash;
 			}
 		}
@@ -140,7 +149,11 @@ namespace ICD.Common.Logging.Activities
 			if (result != 0)
 				return result;
 
-			return string.Compare(m_Message, other.m_Message, StringComparison.InvariantCulture);
+			result = string.Compare(m_Message, other.m_Message, StringComparison.InvariantCulture);
+			if (result != 0)
+				return result;
+
+			return m_Uuid.CompareTo(other.m_Uuid);
 		}
 
 		#endregion

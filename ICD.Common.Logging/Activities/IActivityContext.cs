@@ -7,7 +7,7 @@ namespace ICD.Common.Logging.Activities
 	public interface IActivityContext : IEnumerable<Activity>
 	{
 		/// <summary>
-		/// Raised when the most pressing activity changes.
+		/// Raised when an activity changes.
 		/// </summary>
 		event EventHandler<GenericEventArgs<Activity>> OnActivityChanged;
 
