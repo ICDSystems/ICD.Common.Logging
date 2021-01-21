@@ -6,8 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [8.0.0] - 2021-01-14
+### Added
+ - Added EventLogLogger for logging to the windows EventLog
 
+## [8.0.0] - 2021-01-14
 ### Added
  - Activities have UUIDs so tlemetry can de-duplicate
 

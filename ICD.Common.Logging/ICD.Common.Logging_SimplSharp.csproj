@@ -75,6 +75,7 @@
     <Compile Include="Activities\ActivityContext.cs" />
     <Compile Include="Activities\IActivityContext.cs" />
     <Compile Include="Fusion\FusionErrorEventArgs.cs" />
+    <Compile Include="Loggers\EventLogLogger.cs" />
     <Compile Include="Loggers\IcdErrorLogger.cs" />
     <Compile Include="Loggers\FeedbackLogger.cs" />
     <Compile Include="Fusion\FusionStringBuilder.cs" />
