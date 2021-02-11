@@ -61,7 +61,8 @@ namespace ICD.Common.Logging.Loggers
 					throw new ArgumentOutOfRangeException();
 			}
 
-			EventLog.WriteEntry(m_Source, item.Message, type);
+			// Hack - 1000 is a standard .Net Runtime event ID that reproduces the message without any formatting
+			EventLog.WriteEntry(m_Source, item.Message, type, 1000);
 		}
 	}
 }
