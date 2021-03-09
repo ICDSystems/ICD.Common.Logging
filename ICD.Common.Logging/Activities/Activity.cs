@@ -57,7 +57,6 @@ namespace ICD.Common.Logging.Activities
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		[JsonConstructor]
 		public Activity(ePriority priority, string key, string message, eSeverity severity)
 		{
 			m_Priority = priority;
@@ -65,6 +64,24 @@ namespace ICD.Common.Logging.Activities
 			m_Message = message;
 			m_Severity = severity;
 			m_Uuid = Guid.NewGuid();
+		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="priority"></param>
+		/// <param name="key"></param>
+		/// <param name="message"></param>
+		/// <param name="severity"></param>
+		/// <param name="uuid"></param>
+		[JsonConstructor]
+		public Activity(ePriority priority, string key, string message, eSeverity severity, Guid uuid)
+		{
+			m_Priority = priority;
+			m_Key = key;
+			m_Message = message;
+			m_Severity = severity;
+			m_Uuid = uuid;
 		}
 
 		#region Equality
