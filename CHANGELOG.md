@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
  - Added EventLogLogger for logging to the windows EventLog
+ 
+### Changed
+ - Imposed 20MB file size limit on FileLogger logs, only keep 10 most recent log files.
 
 ## [8.0.0] - 2021-01-14
 ### Added
