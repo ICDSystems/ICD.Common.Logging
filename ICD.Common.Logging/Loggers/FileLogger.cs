@@ -66,6 +66,8 @@ namespace ICD.Common.Logging.Loggers
 			m_LogSizeLimit = logSizeLimit;
 
 			IcdDirectory.CreateDirectory(directoryPath);
+
+			HandleLogSizeLimitReached();
 		}
 
 		#endregion
@@ -123,13 +125,12 @@ namespace ICD.Common.Logging.Loggers
 
 		private void HandleLogSizeLimitReached()
 		{
-			List<string> fileInfos =
-				IcdDirectory.GetFiles(m_LogDirectory)
-				            .OrderByDescending(fi => IcdFile.GetCreationTime(fi))
-				            .ToList();
+			List<string> fileInfos = IcdDirectory.GetFiles(m_LogDirectory)
+			                                     .OrderByDescending(fi => IcdFile.GetCreationTime(fi))
+			                                     .ToList();
 
 			// Delete oldest files so we end up with N - 1 files
-			for (int i = fileInfos.Count - 1; i >= DEFAULT_LOG_COUNT; i--)
+			for (int i = fileInfos.Count - 1; i >= DEFAULT_LOG_COUNT - 1; i--)
 			{
 				string path = fileInfos[i];
 				if (IcdFile.Exists(path))
