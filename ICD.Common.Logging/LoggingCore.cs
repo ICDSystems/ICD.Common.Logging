@@ -9,10 +9,6 @@ using ICD.Common.Utils.Services.Logging;
 
 namespace ICD.Common.Logging
 {
-	/// <summary>
-	/// Core of the ELogging functionality.
-	/// Mainly acts as a rendevous point for log entries
-	/// </summary>
 	[PublicAPI]
 	public sealed class LoggingCore : ILoggerService
 	{
@@ -98,7 +94,7 @@ namespace ICD.Common.Logging
 				return;
 
 			m_QueueSection.Execute(() => m_Queue.Enqueue(item));
-			ThreadingUtils.SafeInvoke(ProcessQueue);
+			ThreadingUtils.SafeInvoke(() => ProcessQueue(true));
 		}
 
 		/// <summary>
@@ -140,6 +136,14 @@ namespace ICD.Common.Logging
 			return m_HistorySection.Execute(() => m_History.ToArray(m_History.Count));
 		}
 
+		/// <summary>
+		/// Writes all enqueued logs.
+		/// </summary>
+		public void Flush()
+		{
+			ProcessQueue(false);
+		}
+
 		#endregion
 
 		#region Private Methods
@@ -147,10 +151,13 @@ namespace ICD.Common.Logging
 		/// <summary>
 		/// Works through the queue of log items and sends them to the registered loggers.
 		/// </summary>
-		private void ProcessQueue()
+		private void ProcessQueue(bool workerThread)
 		{
-			if (!m_ProcessSection.TryEnter())
-				return;
+			if (workerThread)
+				if (!m_ProcessSection.TryEnter())
+					return;
+			else
+				m_ProcessSection.Enter();
 
 			try
 			{
