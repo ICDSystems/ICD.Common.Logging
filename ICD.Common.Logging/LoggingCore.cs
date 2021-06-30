@@ -154,8 +154,10 @@ namespace ICD.Common.Logging
 		private void ProcessQueue(bool workerThread)
 		{
 			if (workerThread)
+			{
 				if (!m_ProcessSection.TryEnter())
 					return;
+			}
 			else
 				m_ProcessSection.Enter();
 
