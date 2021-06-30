@@ -111,11 +111,11 @@ namespace ICD.Common.Logging.Activities
 		/// <summary>
 		/// Returns true if this instance is equal to the given object.
 		/// </summary>
-		/// <param name="other"></param>
+		/// <param name="obj"></param>
 		/// <returns></returns>
-		public override bool Equals(object other)
+		public override bool Equals(object obj)
 		{
-			return other is Activity && Equals((Activity)other);
+			return obj is Activity && Equals((Activity)obj);
 		}
 
 		/// <summary>
