@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [8.2.0] - 2021-08-03
+### Added
+ - LoggingCore - Add Flush() method to write out log queue
+### Changed
+ - FileLogger - fix to respect log file limit
+
 ## [8.1.0] - 2021-05-14
 ### Added
  - Added EventLogLogger for logging to the windows EventLog
