@@ -44,7 +44,7 @@ namespace ICD.Common.Logging.LoggingContexts
 			if (e == null)
 				throw new ArgumentNullException("e");
 
-#if STANDARD
+#if !SIMPLSHARP
 			if (e is AggregateException)
 			{
 				extends.LogEntry(severity, e as AggregateException, message);
@@ -55,7 +55,7 @@ namespace ICD.Common.Logging.LoggingContexts
 			                                    IcdEnvironment.NewLine, e.Message, e.StackTrace));
 		}
 
-#if STANDARD
+#if !SIMPLSHARP
 		/// <summary>
 		/// Logs an aggregate exception as a formatted list of inner exceptions.
 		/// </summary>

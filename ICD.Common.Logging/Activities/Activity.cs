@@ -1,8 +1,14 @@
-﻿using System;
-using ICD.Common.Properties;
-using ICD.Common.Utils.Services.Logging;
+﻿#if NETFRAMEWORK
+extern alias RealNewtonsoft;
+using RealNewtonsoft.Newtonsoft.Json;
+using RealNewtonsoft.Newtonsoft.Json.Converters;
+#else
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+#endif
+using System;
+using ICD.Common.Properties;
+using ICD.Common.Utils.Services.Logging;
 
 namespace ICD.Common.Logging.Activities
 {
