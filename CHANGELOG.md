@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [8.2.1] - 2021-10-04
+### Changed
+ - LoggineCore now uses ThreadedWorkerQueue to process log items
+
 ## [8.2.0] - 2021-08-03
 ### Added
  - LoggingCore - Add Flush() method to write out log queue

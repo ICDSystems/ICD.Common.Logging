@@ -41,9 +41,7 @@ namespace ICD.Common.Logging
 		/// <summary>
 		/// Log items that need to be processed.
 		/// </summary>
-		private readonly Queue<LogItem> m_Queue;
-		private readonly SafeCriticalSection m_QueueSection;
-		private readonly SafeCriticalSection m_ProcessSection;
+		private readonly ThreadedWorkerQueue<LogItem> m_WorkerQueue;
 
 		private int m_LogIndex;
 		private eSeverity m_SeverityLevel;
@@ -73,12 +71,10 @@ namespace ICD.Common.Logging
 		{
 			m_Loggers = new IcdHashSet<ISystemLogger>();
 			m_History = new ScrollQueue<KeyValuePair<int, LogItem>>(HISTORY_SIZE);
-			m_Queue = new Queue<LogItem>();
+			m_WorkerQueue = new ThreadedWorkerQueue<LogItem>(ProcessItem);
 
 			m_LoggersSection = new SafeCriticalSection();
 			m_HistorySection = new SafeCriticalSection();
-			m_QueueSection = new SafeCriticalSection();
-			m_ProcessSection = new SafeCriticalSection();
 		}
 
 		#region Methods
@@ -93,8 +89,7 @@ namespace ICD.Common.Logging
 			if (item.Severity > SeverityLevel)
 				return;
 
-			m_QueueSection.Execute(() => m_Queue.Enqueue(item));
-			ThreadingUtils.SafeInvoke(() => ProcessQueue(true));
+			m_WorkerQueue.Enqueue(item);
 		}
 
 		/// <summary>
@@ -130,7 +125,6 @@ namespace ICD.Common.Logging
 		/// </summary>
 		/// <returns></returns>
 		[PublicAPI]
-		[NotNull]
 		public IEnumerable<KeyValuePair<int, LogItem>> GetHistory()
 		{
 			return m_HistorySection.Execute(() => m_History.ToArray(m_History.Count));
@@ -141,37 +135,12 @@ namespace ICD.Common.Logging
 		/// </summary>
 		public void Flush()
 		{
-			ProcessQueue(false);
+			m_WorkerQueue.WaitForFlush();
 		}
 
 		#endregion
 
 		#region Private Methods
-
-		/// <summary>
-		/// Works through the queue of log items and sends them to the registered loggers.
-		/// </summary>
-		private void ProcessQueue(bool workerThread)
-		{
-			if (workerThread)
-			{
-				if (!m_ProcessSection.TryEnter())
-					return;
-			}
-			else
-				m_ProcessSection.Enter();
-
-			try
-			{
-				LogItem item = default(LogItem);
-				while (m_QueueSection.Execute(() => m_Queue.Dequeue(out item)))
-					ProcessItem(item);
-			}
-			finally
-			{
-				m_ProcessSection.Leave();
-			}
-		}
 
 		/// <summary>
 		/// Sends the log item to the registered loggers.
