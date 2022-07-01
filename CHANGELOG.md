@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [8.2.2] - 2022-07-01
+### Changed
+ - Updated Dependencies, Updated Crestron SDK to 2.18.96
+
 ## [8.2.1] - 2021-10-04
 ### Changed
  - LoggineCore now uses ThreadedWorkerQueue to process log items
