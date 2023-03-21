@@ -85,7 +85,6 @@
     <Compile Include="LoggingContexts\ILoggingContext.cs" />
     <Compile Include="LoggingContexts\ServiceLoggingContext.cs" />
     <Compile Include="LoggingCore.cs" />
-    <Compile Include="ObfuscationSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Properties\ControlSystem.cfg" />
   </ItemGroup>
